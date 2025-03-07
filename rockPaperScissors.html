@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #canvas {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .img {
+            height: 50vh;
+            width: 90vh;
+            display: block;
+            width: 100%;
+        }
+
+        button img {
+            height: 8vh;
+            cursor: pointer;
+        }
+
+        .innerContainer {
+            position: relative;
+            width: max-content;
+        }
+
+        .left-hand,
+        .right-hand {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .left-hand {
+            top: 0;
+            left: 0;
+        }
+
+        .right-hand {
+            top: 0;
+            right: 0;
+        }
+
+        .displayText {
+            z-index: 2;
+            height: 6vh;
+            padding-top: 2vh;
+            background-color: rgb(121, 0, 0);
+            color: rgb(255, 255, 255);
+            border-color: rgb(0, 194, 0);
+            border-style: solid;
+        }
+
+        .left-hand img {
+            margin-right: 50px;
+            margin-top: 130px;
+            width: 33vh;
+        }
+
+        .right-hand img {
+            margin-left: 30px;
+            margin-top: 130px;
+            width: 33vh;
+            transform: rotate(180deg) scaleY(-1);
+        }
+
+        button:active {
+            background-color: rgba(55, 57, 55, 0.807);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="canvas">
+            <h1>Rock, Paper, Scissors</h1>
+            <div class="innerContainer">
+                <img class="img" src="img/backGround.jpg" alt="">
+                <div class="left-hand">
+                    <img src="img/left-Rock-hand.png" alt="" id="leftImg">
+                </div>
+                <div class="right-hand">
+                    <img src="img/left-Rock-hand.png" id="rightImg">
+                </div>
+                <div class="displayText" id="result"><span class="" id="count"></span></div>
+            </div>
+            <br>
+            <button onclick="play('Rock')" id="rock"><img src="img/rock-removebg-preview.png" alt=""></button>
+            <button onclick="play('Paper')"><img src="img/paper-removebg-preview.png" alt=""></button>
+            <button onclick="play('Scissors')"><img src="img/scissor-removebg-preview.png" alt=""></button>
+            <button onclick="location.reload()">Try again</button>
+        </div>
+    </div>
+
+    <script>
+        let imgLeft = document.getElementById('leftImg');
+        let imgRight = document.getElementById('rightImg');
+        let result = document.getElementById('result');
+        let countDown = 3;
+        let score = 0;
+
+        const images = {
+            'Rock': 'img/left-Rock-hand.png',
+            'Paper': 'img/left-hand-paper.png',
+            'Scissors': 'img/left-hand-scissor.png'
+        };
+
+        function play(playerChoice) {
+            let choices = ['Rock', 'Paper', 'Scissors'];
+            let compChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            let intervalId = setInterval(function () {
+                document.getElementById('count').textContent = countDown;
+                if (countDown % 2 === 0) {
+                    document.querySelector('.left-hand').style.transform = 'translateY(-25px)';
+                    document.querySelector('.right-hand').style.transform = 'translateY(-25px)';
+                } else {
+                    document.querySelector('.left-hand').style.transform = 'translateY(20px)';
+                    document.querySelector('.right-hand').style.transform = 'translateY(20px)';
+                }
+                countDown--;
+                if (countDown < 0) {
+                    clearInterval(intervalId);
+                    imgLeft.src = images[playerChoice];
+                    imgRight.src = images[compChoice];
+                    document.querySelector('.left-hand').style.transform = '';
+                    document.querySelector('.right-hand').style.transform = 'translateY(0)';
+                    
+                    if ((playerChoice === 'Rock' && compChoice === 'Scissors') ||
+                        (playerChoice === 'Scissors' && compChoice === 'Paper') ||
+                        (playerChoice === 'Paper' && compChoice === 'Rock')) {
+                        result.textContent = `You Win!`;
+                    } else if (playerChoice === compChoice) {
+                        result.textContent = `It's a Draw.`;
+                    } else {
+                        result.textContent = `Computer Wins.`;
+                    }
+                }
+            }, 1000);
+
+            countDown = 3;
+        }
+
+    </script>
+</body>
+
+</html>
